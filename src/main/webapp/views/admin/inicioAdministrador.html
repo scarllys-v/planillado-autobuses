@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Planillado Autobuses</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f2f5;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 260px;
+            height: 100%;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: white;
+            transition: all 0.3s;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 25px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header .bus-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-header h3 {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        .sidebar-header p {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 5px;
+        }
+
+        .nav-menu {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            padding: 12px 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #cbd5e1;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: rgba(220, 38, 38, 0.2);
+            border-left-color: #dc2626;
+            color: white;
+        }
+
+        .nav-item .icon {
+            font-size: 20px;
+            width: 24px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            padding: 20px;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: white;
+            border-radius: 15px;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .logout-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #b91c1c;
+        }
+
+        /* Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #dc2626;
+        }
+
+        .stat-card .stat-label {
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        /* Content Panels */
+        .content-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: none;
+        }
+
+        .content-panel.active {
+            display: block;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: #ea580c;
+        }
+
+        .search-bar button {
+            padding: 12px 24px;
+            background: #ea580c;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .btn-edit {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-delete {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .data-table th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .data-table tr:hover {
+            background: #f8fafc;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: #28a745;
+        }
+
+        .status-inactive {
+            background: #fee;
+            color: #dc2626;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            width: 500px;
+            max-width: 90%;
+        }
+
+        .modal-content h3 {
+            margin-bottom: 20px;
+        }
+
+        .modal-content input,
+        .modal-content select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                left: -260px;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="sidebar-header">
+        <div class="bus-icon">🚍</div>
+        <h3>Planillado Autobuses</h3>
+        <p>Panel de Administración</p>
+    </div>
+    <div class="nav-menu">
+        <div class="nav-item active" data-tab="dashboard">
+            <span class="icon">📊</span>
+            <span>Dashboard</span>
+        </div>
+        <div class="nav-item" data-tab="usuarios">
+            <span class="icon">👥</span>
+            <span>Usuarios</span>
+        </div>
+        <div class="nav-item" data-tab="conductores">
+            <span class="icon">👨‍✈️</span>
+            <span>Conductores</span>
+        </div>
+        <div class="nav-item" data-tab="buses">
+            <span class="icon">🚌</span>
+            <span>Buses</span>
+        </div>
+        <div class="nav-item" data-tab="rutas">
+            <span class="icon">🛣️</span>
+            <span>Rutas</span>
+        </div>
+        <div class="nav-item" data-tab="recorridos">
+            <span class="icon">📅</span>
+            <span>Recorridos</span>
+        </div>
+        <div class="nav-item" data-tab="paradas">
+            <span class="icon">🚏</span>
+            <span>Paradas</span>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+    <div class="top-bar">
+        <div class="page-title" id="currentTitle">Dashboard</div>
+        <div class="user-info">
+            <span>Bienvenido, <strong id="adminName">Administrador</strong></span>
+            <div class="user-avatar">A</div>
+            <form action="logout" method="post" style="display: inline;">
+                <button type="submit" class="logout-btn">Cerrar Sesión</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Panel Dashboard -->
+    <div id="dashboard" class="content-panel active">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalUsuarios">0</div>
+                <div class="stat-label">Usuarios</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalConductores">0</div>
+                <div class="stat-label">Conductores</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalBuses">0</div>
+                <div class="stat-label">Buses</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalRutas">0</div>
+                <div class="stat-label">Rutas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalRecorridos">0</div>
+                <div class="stat-label">Recorridos Hoy</div>
+            </div>
+        </div>
+
+        <div style="background: #f8fafc; border-radius: 15px; padding: 20px;">
+            <h3>📋 Próximos Recorridos</h3>
+            <table class="data-table" id="proximosRecorridos">
+                <thead>
+                <tr><th>Bus</th><th>Conductor</th><th>Ruta</th><th>Hora</th><th>Estado</th></tr>
+                </thead>
+                <tbody>
+                <tr><td>BUS-001</td><td>Juan Pérez</td><td>Norte-Sur</td><td>10:15 AM</td><td><span class="status-badge status-active">En curso</span></td></tr>
+                <tr><td>BUS-002</td><td>Ana Gómez</td><td>Centro-Aeropuerto</td><td>10:30 AM</td><td><span class="status-badge status-active">Programado</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Panel Usuarios -->
+    <div id="usuarios" class="content-panel">
+        <h3>👥 Gestión de Usuarios</h3>
+        <button class="btn-primary" onclick="abrirModal('usuario')">+ Nuevo Usuario</button>
+        <div class="search-bar">
+            <input type="text" id="searchUsuario" placeholder="Buscar por nombre o email...">
+            <button onclick="buscarUsuarios()">Buscar</button>
+        </div>
+        <table class="data-table" id="tablaUsuarios">
+            <thead>
+            <tr><th>ID</th><th>Nombre</th><th>Email</th><th>Rol</th><th>Estado</th><th>Acciones</th></tr>
+            </thead>
+            <tbody>
+            <tr><td>1</td><td>Admin Principal</td><td>admin@planillado.com</td><td>Administrador</td><td><span class="status-badge status-active">Activo</span></td><td><button class="btn-edit">Editar</button> <button class="btn-delete">Eliminar</button></td></tr>
+            <tr><td>2</td><td>Juan Pérez</td><td>juan@mail.com</td><td>Conductor</td><td><span class="status-badge status-active">Activo</span></td><td><button class="btn-edit">Editar</button> <button class="btn-delete">Eliminar</button></td></tr>
+            <tr><td>3</td><td>María López</td><td>maria@mail.com</td><td>Usuario</td><td><span class="status-badge status-inactive">Inactivo</span></td><td><button class="btn-edit">Editar</button> <button class="btn-delete">Eliminar</button></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Panel Conductores -->
+    <div id="conductores" class="content-panel">
+        <h3>👨‍✈️ Gestión de Conductores</h3>
+        <button class="btn-primary" onclick="abrirModal('conductor')">+ Nuevo Conductor</button>
+        <div class="search-bar">
+            <input type="text" id="searchConductor" placeholder="Buscar conductor...">
+            <button onclick="buscarConductores()">Buscar</button>
+        </div>
+        <table class="data-table">
+            <thead>
+            <tr><th>ID</th><th>Nombre</th><th>Licencia</th><th>Teléfono</th><th>Email</th><th>Estado</th><th>Acciones</th></tr>
+            </thead>
+            <tbody>
+            <tr><td>1</td><td>Juan Pérez</td><td>L123456</td><td>3001234567</td><td>juan@mail.com</td><td><span class="status-badge status-active">Activo</span></td><td><button class="btn-edit">Editar</button> <button class="btn-delete">Eliminar</button></td></tr>
+            <tr><td>2</td><td>Carlos Ruiz</td><td>L789012</td><td>3007654321</td><td>carlos@mail.com</td><td><span class="status-badge status-active">Activo</span></td><td><button class="btn-edit">Editar</button> <button class="btn-delete">Eliminar</button></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Panel Buses -->
+    <div id="buses" class="content-panel">
+        <h3>🚌 Gestión de Buses</h3>
+        <button class="btn-primary" onclick="abrirModal('bus')">+ Nuevo Bus</button>
+        <div class="search-bar">
+            <input type="text" id="searchBus" placeholder="Buscar por número o placa...">
+            <button onclick="buscarBuses()">Buscar</button>
+        </div>
+        <table class="data-table">
+            <thead>
+            <tr><th>ID</th><th>Número</th><th>Placa</th><th>Modelo</th><th>Estado</th><th>Acciones</th></tr>
+            </thead>
+            <tbody>
+            <tr><td>1</td><td>BUS-001</td><td>ABC-123</td><td>Mercedes 2023</td><td><span class="status-badge status-active">Activo</span></td><td><button class="btn-edit">Editar</button> <button class="btn-delete">Eliminar</button></td></tr>
+            <tr><td>2</td><td>BUS-002</td><td>XYZ-789</td><td>Volvo 2022</td><td><span class="status-badge status-active">Activo</span></td><td><button class="btn-edit">Editar</button> <button class="btn-delete">Eliminar</button></td></tr>
+            <tr><td>3</td><td>BUS-003</td><td>DEF-456</td><td>Scania 2024</td><td><span class="status-badge status-inactive">Mantenimiento</span></td><td><button class="btn-edit">Editar</button> <button class="btn-delete">Eliminar</button></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Panel Rutas -->
+    <div id="rutas" class="content-panel">
+        <h3>🛣️ Gestión de Rutas</h3>
+        <button class="btn-primary" onclick="abrirModal('ruta')">+ Nueva Ruta</button>
+        <div class="search-bar">
+            <input type="text" id="searchRuta" placeholder="Buscar ruta...">
+            <button onclick="buscarRutas()">Buscar</button>
+        </div>
+        <table class="data-table">
+            <thead>
+            <tr><th>ID</th><th>Nombre Ruta</th><th>Origen</th><th>Destino</th><th>Distancia (km)</th><th>Acciones</th></tr>
+            </thead>
+            <tbody>
+            <tr><td>1</td><td>Ruta Norte-Sur</td><td>Terminal Norte</td><td>Terminal Sur</td><td>25</td><td><button class="btn-edit">Editar</button> <button class="btn-delete">Eliminar</button></td></tr>
+            <tr><td>2</td><td>Ruta Centro-Aeropuerto</td><td>Plaza Central</td><td>Aeropuerto</td><td>18</td><td><button class="btn-edit">Editar</button> <button class="btn-delete">Eliminar</button></td></tr>
+            <tr><td>3</td><td>Ruta Este-Oeste</td><td>Barrio Oriente</td><td>Zona Industrial</td><td>32</td><td><button class="btn-edit">Editar</button> <button class="btn-delete">Eliminar</button></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Panel Recorridos -->
+    <div id="recorridos" class="content-panel">
+        <h3>📅 Gestión de Recorridos</h3>
+        <button class="btn-primary" onclick="abrirModal('recorrido')">+ Nuevo Recorrido</button>
+        <div class="search-bar">
+            <input type="text" id="searchRecorrido" placeholder="Buscar por fecha...">
+            <button onclick="buscarRecorridos()">Buscar</button>
+        </div>
+        <table class="data-table">
+            <thead>
+            <tr><th>ID</th><th>Bus</th><th>Conductor</th><th>Ruta</th><th>Fecha</th><th>Hora Inicio</th><th>Estado</th><th>Acciones</th></tr>
+            </thead>
+            <tbody>
+            <tr><td>1</td><td>BUS-001</td><td>Juan Pérez</td><td>Norte-Sur</td><td>2024-01-15</td><td>06:00</td><td><span class="status-badge status-active">Completado</span></td><td><button class="btn-edit">Editar</button> <button class="btn-delete">Eliminar</button></td></tr>
+            <tr><td>2</td><td>BUS-002</td><td>Ana Gómez</td><td>Centro-Aeropuerto</td><td>2024-01-15</td><td>07:30</td><td><span class="status-badge status-active">En curso</span></td><td><button class="btn-edit">Editar</button> <button class="btn-delete">Eliminar</button></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Panel Paradas -->
+    <div id="paradas" class="content-panel">
+        <h3>🚏 Gestión de Paradas</h3>
+        <button class="btn-primary" onclick="abrirModal('parada')">+ Nueva Parada</button>
+        <div class="search-bar">
+            <input type="text" id="searchParada" placeholder="Buscar parada...">
+            <button onclick="buscarParadas()">Buscar</button>
+        </div>
+        <table class="data-table">
+            <thead>
+            <tr><th>ID</th><th>Nombre</th><th>Ubicación</th><th>Ruta Asociada</th><th>Orden</th><th>Acciones</th></tr>
+            </thead>
+            <tbody>
+            <tr><td>1</td><td>Terminal Norte</td><td>Calle 80 #45-20</td><td>Ruta Norte-Sur</td><td>1</td><td><button class="btn-edit">Editar</button> <button class="btn-delete">Eliminar</button></td></tr>
+            <tr><td>2</td><td>Plaza Central</td><td>Carrera 15 #34-10</td><td>Ruta Centro-Aeropuerto</td><td>2</td><td><button class="btn-edit">Editar</button> <button class="btn-delete">Eliminar</button></td></tr>
+            <tr><td>3</td><td>Aeropuerto</td><td>Autopista Norte #100</td><td>Ruta Centro-Aeropuerto</td><td>5</td><td><button class="btn-edit">Editar</button> <button class="btn-delete">Eliminar</button></td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal para formularios -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <h3 id="modalTitle">Nuevo Registro</h3>
+        <form id="modalForm">
+            <div id="modalFields"></div>
+            <div class="modal-buttons">
+                <button type="button" class="btn-delete" onclick="cerrarModal()">Cancelar</button>
+                <button type="submit" class="btn-primary">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Cambiar entre pestañas
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', function() {
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            this.classList.add('active');
+
+            const tab = this.dataset.tab;
+            document.querySelectorAll('.content-panel').forEach(panel => panel.classList.remove('active'));
+            document.getElementById(tab).classList.add('active');
+
+            const titles = {
+                dashboard: 'Dashboard',
+                usuarios: 'Gestión de Usuarios',
+                conductores: 'Gestión de Conductores',
+                buses: 'Gestión de Buses',
+                rutas: 'Gestión de Rutas',
+                recorridos: 'Gestión de Recorridos',
+                paradas: 'Gestión de Paradas'
+            };
+            document.getElementById('currentTitle').textContent = titles[tab];
+        });
+    });
+
+    // Modal functions
+    function abrirModal(tipo) {
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalFields = document.getElementById('modalFields');
+
+        let fields = '';
+        if (tipo === 'usuario') {
+            modalTitle.textContent = 'Nuevo Usuario';
+            fields = `
+                <input type="text" placeholder="Nombre" required>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Contraseña" required>
+                <select>
+                    <option value="1">Administrador</option>
+                    <option value="2">Conductor</option>
+                    <option value="3">Usuario</option>
+                </select>
+            `;
+        } else if (tipo === 'conductor') {
+            modalTitle.textContent = 'Nuevo Conductor';
+            fields = `
+                <input type="text" placeholder="Nombre completo" required>
+                <input type="text" placeholder="Número de licencia" required>
+                <input type="tel" placeholder="Teléfono" required>
+                <input type="email" placeholder="Email" required>
+            `;
+        } else if (tipo === 'bus') {
+            modalTitle.textContent = 'Nuevo Bus';
+            fields = `
+                <input type="text" placeholder="Número de bus" required>
+                <input type="text" placeholder="Placa" required>
+                <input type="text" placeholder="Modelo" required>
+                <select>
+                    <option value="Activo">Activo</option>
+                    <option value="Inactivo">Inactivo</option>
+                    <option value="Mantenimiento">Mantenimiento</option>
+                </select>
+            `;
+        } else if (tipo === 'ruta') {
+            modalTitle.textContent = 'Nueva Ruta';
+            fields = `
+                <input type="text" placeholder="Nombre de la ruta" required>
+                <input type="text" placeholder="Origen" required>
+                <input type="text" placeholder="Destino" required>
+                <input type="number" placeholder="Distancia (km)" required>
+            `;
+        } else if (tipo === 'recorrido') {
+            modalTitle.textContent = 'Nuevo Recorrido';
+            fields = `
+                <select><option>Seleccionar Bus</option></select>
+                <select><option>Seleccionar Conductor</option></select>
+                <select><option>Seleccionar Ruta</option></select>
+                <input type="date" placeholder="Fecha" required>
+                <input type="time" placeholder="Hora inicio" required>
+            `;
+        } else if (tipo === 'parada') {
+            modalTitle.textContent = 'Nueva Parada';
+            fields = `
+                <input type="text" placeholder="Nombre de la parada" required>
+                <input type="text" placeholder="Ubicación" required>
+                <select><option>Seleccionar Ruta</option></select>
+                <input type="number" placeholder="Orden en la ruta" required>
+            `;
+        }
+
+        modalFields.innerHTML = fields;
+        modal.style.display = 'flex';
+    }
+
+    function cerrarModal() {
+        document.getElementById('modal').style.display = 'none';
+    }
+
+    // Cerrar modal al hacer clic fuera
+    window.onclick = function(event) {
+        const modal = document.getElementById('modal');
+        if (event.target === modal) {
+            cerrarModal();
+        }
+    }
+
+    // Funciones de búsqueda (simuladas)
+    function buscarUsuarios() {
+        const termino = document.getElementById('searchUsuario').value;
+        alert('Buscando usuarios: ' + termino);
+    }
+
+    function buscarConductores() {
+        alert('Buscando conductores...');
+    }
+
+    function buscarBuses() {
+        alert('Buscando buses...');
+    }
+
+    function buscarRutas() {
+        alert('Buscando rutas...');
+    }
+
+    function buscarRecorridos() {
+        alert('Buscando recorridos...');
+    }
+
+    function buscarParadas() {
+        alert('Buscando paradas...');
+    }
+
+    // Cargar datos reales desde el servidor (cuando tengas backend)
+    function cargarDatosReales() {
+        // Aquí irán las llamadas AJAX a tus servlets
+        fetch('/planillado/api/usuarios/total')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('totalUsuarios').textContent = data.total;
+            });
+    }
+</script>
+</body>
+</html>
