@@ -1,7 +1,7 @@
 package com.planillado.servlets;
 
 import com.planillado.dao.UsuarioDAO;
-import com.planillado.model.usuarios;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,7 +12,7 @@ import java.io.IOException;
 @SuppressWarnings("CallToPrintStackTrace")
 
 @WebServlet("/registro")
-public class registroServlet extends HttpServlet {
+public class RegistroServlet extends HttpServlet {
     private final UsuarioDAO usuarioDAO = new UsuarioDAO();
 
     @Override
@@ -25,14 +25,14 @@ public class registroServlet extends HttpServlet {
         String rol = request.getParameter("rol");
 
         try {
-            usuarios usuarioExistente = usuarioDAO.obtenerUsuarioPorEmail(email);
+            com.planillado.model.Usuarios usuarioExistente = usuarioDAO.obtenerUsuarioPorEmail(email);
 
             if (usuarioExistente != null) {
                 response.sendRedirect("views/registro.html?error=El email ya está registrado");
                 return;
             }
 
-            usuarios nuevoUsuario = new usuarios();
+            com.planillado.model.Usuarios nuevoUsuario = new com.planillado.model.Usuarios();
             nuevoUsuario.setNombre(nombre);
             nuevoUsuario.setEmail(email);
             nuevoUsuario.setPasswordHash(password);

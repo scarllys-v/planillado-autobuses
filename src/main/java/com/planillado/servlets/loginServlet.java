@@ -1,7 +1,7 @@
 package com.planillado.servlets;
 
 import com.planillado.dao.UsuarioDAO;
-import com.planillado.model.usuarios;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet("/login")
-public class loginServlet extends HttpServlet {
+public class LoginServlet extends HttpServlet {
 
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
 
@@ -23,7 +23,7 @@ public class loginServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         try {
-            usuarios usuario = usuarioDAO.obtenerUsuarioPorEmail(email);
+            com.planillado.model.Usuarios usuario = usuarioDAO.obtenerUsuarioPorEmail(email);
 
             if (usuario != null && usuario.getPasswordHash().equals(password)) {
 

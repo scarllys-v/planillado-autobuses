@@ -2,7 +2,7 @@ package com.planillado;
 
 import com.planillado.utils.DatabaseConnection;
 import com.planillado.dao.UsuarioDAO;
-import com.planillado.model.usuarios;
+
 import java.sql.SQLException;
 
 
@@ -28,7 +28,7 @@ public class Main {
                 System.out.println(" No hay usuarios en la base de datos");
             } else {
                 System.out.println(" Se encontraron " + usuarios.size() + " usuarios:");
-                for (usuarios u : usuarios) {
+                for (com.planillado.model.Usuarios u : usuarios) {
                     System.out.println("   - " + u.getNombre() + " (" + u.getEmail() + ")");
                 }
             }

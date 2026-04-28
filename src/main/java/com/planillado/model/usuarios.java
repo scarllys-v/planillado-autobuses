@@ -1,7 +1,7 @@
 package com.planillado.model;
 
 
-public class usuarios {
+public class Usuarios {
     private int id_usuario;
     private String nombre;
     private String email;
@@ -11,9 +11,9 @@ public class usuarios {
 
 
     // Constructor vacío
-    public usuarios() {}
+    public Usuarios() {}
 
-    public usuarios(int id_usuario, String nombre, String email, String password_hash, int id_rol, boolean activo) {
+    public Usuarios(int id_usuario, String nombre, String email, String password_hash, int id_rol, boolean activo) {
         this.id_usuario = id_usuario;
         this.nombre = nombre;
         this.email = email;
