@@ -6,7 +6,7 @@ import com.planillado.utils.DatabaseConnection;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+//holis
 public class BusDAO {
     public void insertarBus(Buses bus) throws SQLException {
         String sql = "INSERT INTO buses (numero_bus, placa, model, estado) VALUES (?, ?, ?, ?)";
