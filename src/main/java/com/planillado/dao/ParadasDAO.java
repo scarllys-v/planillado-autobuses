@@ -36,22 +36,23 @@ public class ParadasDAO {
         return lista;
     }
 
-    public boolean insertarParada(Paradas p){
-    String sql = "INSERT INTO paradas (id_ruta, nombre_parada, orden, latitud, longitud) VALUES (?, ?, ?, ?, ?)";
+    public boolean insertParada(Paradas p) {
+        String sql = "INSERT INTO paradas (id_ruta, nombre_parada, orden, latitud, longitud) VALUES (?, ?, ?, ?, ?)";
 
-    try(Connection conn = DatabaseConnection.getConnection();
-    PreparedStatement ps = conn.prepareStatement(sql)){
-        ps.setInt(1,p.getIdRuta());
-        ps.setString(2, p.getNombre());
-        ps.setInt(3, p.getOrden());
-        ps.setBigDecimal(4, p.getLatitud());
-        ps.setBigDecimal(5, p.getLongitud());
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        return ps.executeUpdate() > 0;
-    }catch (Exception e){
-        e.printStackTrace();
-        return false;
-    }
+            ps.setInt(1, p.getIdRuta());
+            ps.setString(2, p.getNombre());
+            ps.setInt(3, p.getOrden());
+            ps.setBigDecimal(4, p.getLatitud());
+            ps.setBigDecimal(5, p.getLongitud());
 
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
