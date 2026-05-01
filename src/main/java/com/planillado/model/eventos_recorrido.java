@@ -1,9 +1,8 @@
 package com.planillado.model;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 
-public class eventos_recorrido {
+public class Eventos_recorrido {
     private int id_evento;
     private int id_recorrido;
     private int id_parada;
@@ -14,12 +13,12 @@ public class eventos_recorrido {
     private String observacion;
 
     // Constructor vacío
-    public eventos_recorrido() {}
+    public Eventos_recorrido() {}
 
     // Constructor completo
-    public eventos_recorrido(int id_evento, int id_recorrido, int id_parada, int id_usuario,
-                           String tipo_evento, Timestamp hora_registro,
-                           Integer tiempo_estimado_siguiente, String observacion) {
+    public Eventos_recorrido(int id_evento, int id_recorrido, int id_parada, int id_usuario,
+                             String tipo_evento, Timestamp hora_registro,
+                             Integer tiempo_estimado_siguiente, String observacion) {
         this.id_evento = id_evento;
         this.id_recorrido = id_recorrido;
         this.id_parada = id_parada;

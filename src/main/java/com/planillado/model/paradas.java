@@ -1,7 +1,7 @@
 package com.planillado.model;
 import java.math.BigDecimal;
 
-public class paradas {
+public class Paradas {
     private int id_parada;
     private int id_ruta;
     private String nombre_parada;
@@ -11,10 +11,10 @@ public class paradas {
 
 
     // Constructor vacío
-    public paradas() {}
+    public Paradas() {}
 
     // Constructor completo
-    public paradas(int id_parada,int id_ruta, String nombre_parada,int orden, BigDecimal latitud, BigDecimal longitud) {
+    public Paradas(int id_parada, int id_ruta, String nombre_parada, int orden, BigDecimal latitud, BigDecimal longitud) {
         this.id_parada = id_parada;
         this.id_ruta = id_ruta;
         this.nombre_parada = nombre_parada;

@@ -1,7 +1,9 @@
-package com.planillado.servlets;  // ← Asegura que coincida con tu carpeta
+package com.planillado.servlets;
 
 import com.planillado.dao.UsuarioDAO;
-import com.planillado.model.usuarios;
+import com.planillado.model.Usuarios;
+
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,17 +14,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @WebServlet("/registro")
-public class registroServlet extends HttpServlet {
+public class RegistroServlet extends HttpServlet {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private static final Logger LOGGER = Logger.getLogger(registroServlet.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(RegistroServlet.class.getName());
+
     private final UsuarioDAO usuarioDAO = new UsuarioDAO();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+            throws ServletException, IOException {
 
         String nombre = request.getParameter("nombre");
         String email = request.getParameter("email");
@@ -30,14 +33,14 @@ public class registroServlet extends HttpServlet {
         String rol = request.getParameter("rol");
 
         try {
-            usuarios usuarioExistente = usuarioDAO.obtenerUsuarioPorEmail(email);
+            Usuarios usuarioExistente = usuarioDAO.obtenerUsuarioPorEmail(email);
 
             if (usuarioExistente != null) {
                 response.sendRedirect(request.getContextPath() + "/views/registro.html?error=El email ya está registrado");
                 return;
             }
 
-            usuarios nuevoUsuario = new usuarios();
+            Usuarios nuevoUsuario = new Usuarios();
             nuevoUsuario.setNombre(nombre);
             nuevoUsuario.setEmail(email);
             nuevoUsuario.setPasswordHash(password);
@@ -50,6 +53,7 @@ public class registroServlet extends HttpServlet {
             }
 
             usuarioDAO.insertarUsuario(nuevoUsuario);
+
             response.sendRedirect(request.getContextPath() + "/views/login.html?success=Cuenta creada exitosamente");
 
         } catch (Exception e) {

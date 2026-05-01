@@ -1,6 +1,6 @@
 package com.planillado.model;
 
-public class buses {
+public class Buses {
     private int id_bus;
     private String numero_bus;
     private String placa;
@@ -8,10 +8,10 @@ public class buses {
     private String estado;
 
     // Constructor vacío
-    public buses() {}
+    public Buses() {}
 
     // Constructor completo
-    public buses(int id_bus,String numero_bus, String placa, String modelo,  String estado) {
+    public Buses(int id_bus, String numero_bus, String placa, String modelo, String estado) {
         this.id_bus = id_bus;
         this.numero_bus = numero_bus;
         this.placa = placa;

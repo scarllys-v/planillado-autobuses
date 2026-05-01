@@ -1,14 +1,14 @@
 package com.planillado.model;
 
-public class roles {
+public class Roles {
     private int id_rol;
     private String nombre_rol;
 
     // Constructor vacío
-    public roles() {}
+    public Roles() {}
 
     // Constructor con parámetros
-    public roles(int id_rol, String nombre_rol) {
+    public Roles(int id_rol, String nombre_rol) {
         this.id_rol = id_rol;
         this.nombre_rol = nombre_rol;
     }

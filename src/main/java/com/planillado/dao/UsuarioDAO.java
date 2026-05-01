@@ -1,6 +1,5 @@
 package com.planillado.dao;
 
-import com.planillado.model.usuarios;
 import com.planillado.utils.DatabaseConnection;
 
 import java.sql.*;
@@ -10,7 +9,7 @@ import java.util.List;
 
 public class UsuarioDAO {
     // 1. INSERTAR un nuevo usuario
-    public void insertarUsuario(usuarios usuario) throws SQLException {
+    public void insertarUsuario(com.planillado.model.Usuarios usuario) throws SQLException {
         String sql = "INSERT INTO usuarios (nombre, email, password_hash, id_rol, activo) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -34,9 +33,9 @@ public class UsuarioDAO {
     }
 
     // 2. OBTENER usuario por ID
-    public usuarios obtenerUsuarioPorId(int id) throws SQLException {
+    public com.planillado.model.Usuarios obtenerUsuarioPorId(int id) throws SQLException {
         String sql = "SELECT * FROM usuarios WHERE id_usuario = ?";
-        usuarios usuario = null;
+        com.planillado.model.Usuarios usuario = null;
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -52,9 +51,9 @@ public class UsuarioDAO {
     }
 
     // 3. OBTENER usuario por email
-    public usuarios obtenerUsuarioPorEmail(String email) throws SQLException {
+    public com.planillado.model.Usuarios obtenerUsuarioPorEmail(String email) throws SQLException {
         String sql = "SELECT * FROM usuarios WHERE email = ?";
-        usuarios usuario = null;
+        com.planillado.model.Usuarios usuario = null;
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -70,8 +69,8 @@ public class UsuarioDAO {
     }
 
     // 4. OBTENER TODOS los usuarios
-    public List<usuarios> obtenerTodosLosUsuarios() throws SQLException {
-        List<usuarios> usuarios = new ArrayList<>();
+    public List<com.planillado.model.Usuarios> obtenerTodosLosUsuarios() throws SQLException {
+        List<com.planillado.model.Usuarios> usuarios = new ArrayList<>();
         String sql = "SELECT * FROM usuarios";
         Connection conn = null;
         Statement stmt = null;
@@ -95,8 +94,8 @@ public class UsuarioDAO {
     }
 
     // 6. OBTENER solo usuarios activos
-    public List<usuarios> obtenerUsuariosActivos() throws SQLException {
-        List<usuarios> usuarios = new ArrayList<>();
+    public List<com.planillado.model.Usuarios> obtenerUsuariosActivos() throws SQLException {
+        List<com.planillado.model.Usuarios> usuarios = new ArrayList<>();
         String sql = "SELECT * FROM usuarios WHERE activo = true";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -111,7 +110,7 @@ public class UsuarioDAO {
     }
 
     // 7. ACTUALIZAR un usuario
-    public void actualizarUsuario(usuarios usuario) throws SQLException {
+    public void actualizarUsuario(com.planillado.model.Usuarios usuario) throws SQLException {
         String sql = "UPDATE usuarios SET nombre = ?, email = ?, password_hash = ?, id_rol = ?, activo = ? WHERE id_usuario = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -205,8 +204,8 @@ public class UsuarioDAO {
     }
 
     // Metodo auxiliar para mapear ResultSet a objeto usuarios
-    private usuarios mapearUsuario(ResultSet rs) throws SQLException {
-        usuarios usuario = new usuarios();
+    private com.planillado.model.Usuarios mapearUsuario(ResultSet rs) throws SQLException {
+        com.planillado.model.Usuarios usuario = new com.planillado.model.Usuarios();
         usuario.setIdUsuario(rs.getInt("id_usuario"));
         usuario.setNombre(rs.getString("nombre"));
         usuario.setEmail(rs.getString("email"));

@@ -1,6 +1,6 @@
 package com.planillado.model;
 
-public class rutas {
+public class Rutas {
     private int id_ruta;
     private String nombre_ruta;
     private String origen;
@@ -8,10 +8,10 @@ public class rutas {
     private int distancia_km;
 
     // Constructor vacío
-    public rutas() {}
+    public Rutas() {}
 
     // Constructor completo
-    public rutas(int id_ruta, String nombre_ruta, String origen, String destino, int distancia_km) {
+    public Rutas(int id_ruta, String nombre_ruta, String origen, String destino, int distancia_km) {
         this.id_ruta = id_ruta;
         this.nombre_ruta = nombre_ruta;
         this.origen = origen;

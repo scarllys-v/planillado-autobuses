@@ -1,7 +1,7 @@
 package com.planillado.servlets;
 
 import com.planillado.dao.RecorridoDAO;
-import com.planillado.model.recorridos;
+import com.planillado.model.Recorridos;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -30,7 +30,7 @@ public class RecorridosServlet extends HttpServlet {
 
         if (action == null || action.equals("/")) {
             // Listar todos los recorridos
-            List<recorridos> recorridos = recorridoDAO.getAllRecorridos();
+            List<Recorridos> recorridos = recorridoDAO.getAllRecorridos();
             req.setAttribute("recorridos", recorridos);
             req.getRequestDispatcher("/views/admin/recorridos/listar.jsp").forward(req, resp);
 
@@ -40,7 +40,7 @@ public class RecorridosServlet extends HttpServlet {
 
         } else if (action.equals("/editar")) {
             int id = Integer.parseInt(req.getParameter("id"));
-            recorridos recorrido = recorridoDAO.getRecorridoById(id);
+            Recorridos recorrido = recorridoDAO.getRecorridoById(id);
             req.setAttribute("recorrido", recorrido);
             req.getRequestDispatcher("/views/admin/recorridos/formulario.jsp").forward(req, resp);
 
@@ -67,7 +67,7 @@ public class RecorridosServlet extends HttpServlet {
             Time horaFin = Time.valueOf(req.getParameter("hora_fin"));
             String estado = req.getParameter("estado");
 
-            recorridos recorrido = new recorridos();
+            Recorridos recorrido = new Recorridos();
             recorrido.setId_bus(idBus);
             recorrido.setId_ruta(idRuta);
             recorrido.setId_conductor(idConductor);

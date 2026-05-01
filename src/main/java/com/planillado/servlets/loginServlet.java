@@ -1,7 +1,9 @@
 package com.planillado.servlets;
 
 import com.planillado.dao.UsuarioDAO;
-import com.planillado.model.usuarios;
+import com.planillado.model.Usuarios;
+
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,9 +14,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @WebServlet("/login")
-public class loginServlet extends HttpServlet {
+public class LoginServlet extends HttpServlet {
 
-    private static final Logger LOGGER = Logger.getLogger(loginServlet.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(LoginServlet.class.getName());
     private final UsuarioDAO usuarioDAO = new UsuarioDAO();
 
     @Override
@@ -23,42 +25,36 @@ public class loginServlet extends HttpServlet {
         response.getWriter().println("Servlet login funcionando correctamente");
     }
 
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+            throws ServletException, IOException {
 
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        // Validar campos vacíos
         if (email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
             response.sendRedirect(request.getContextPath() + "/views/login.html?error=Email y contraseña son obligatorios");
             return;
         }
 
         try {
-            usuarios usuario = usuarioDAO.obtenerUsuarioPorEmail(email);
+            Usuarios usuario = usuarioDAO.obtenerUsuarioPorEmail(email);
 
-            // Usuario no existe
             if (usuario == null) {
                 response.sendRedirect(request.getContextPath() + "/views/login.html?error=Usuario no encontrado");
                 return;
             }
 
-            // Contraseña incorrecta
             if (!usuario.getPasswordHash().equals(password)) {
                 response.sendRedirect(request.getContextPath() + "/views/login.html?error=Contraseña incorrecta");
                 return;
             }
 
-            // Usuario desactivado
             if (!usuario.isActivo()) {
-                response.sendRedirect(request.getContextPath() + "/views/login.html?error=Usuario desactivado, contacte al administrador");
+                response.sendRedirect(request.getContextPath() + "/views/login.html?error=Usuario desactivado");
                 return;
             }
 
-            // Login exitoso
             HttpSession session = request.getSession();
             session.setAttribute("usuario", usuario);
             session.setAttribute("idUsuario", usuario.getIdUsuario());
@@ -68,7 +64,6 @@ public class loginServlet extends HttpServlet {
 
             int rol = usuario.getIdRol();
 
-            // Redirigir según rol (¡con .html!)
             if (rol == 1) {
                 response.sendRedirect(request.getContextPath() + "/views/admin/dashboard.html");
             } else if (rol == 2) {
@@ -78,8 +73,8 @@ public class loginServlet extends HttpServlet {
             }
 
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Error en login: " + e.getMessage(), e);
-            response.sendRedirect(request.getContextPath() + "/views/login.html?error=Error interno del servidor");
+            LOGGER.log(Level.SEVERE, "Error en login", e);
+            response.sendRedirect(request.getContextPath() + "/views/login.html?error=Error interno");
         }
     }
 }

@@ -3,7 +3,7 @@ package com.planillado.model;
 import java.sql.Date;
 import java.sql.Time;
 
-public class recorridos {
+public class Recorridos {
     private int id_recorrido;
     private int id_bus;
     private int id_ruta;
@@ -14,10 +14,10 @@ public class recorridos {
     private String estado;
 
     // Constructor vacío
-    public recorridos() {}
+    public Recorridos() {}
 
     // Constructor con parámetros
-    public recorridos(int id_recorrido, int id_bus, int id_ruta, int id_conductor, Date fecha, Time hora_inicio, Time hora_fin, String estado) {
+    public Recorridos(int id_recorrido, int id_bus, int id_ruta, int id_conductor, Date fecha, Time hora_inicio, Time hora_fin, String estado) {
         this.id_recorrido = id_recorrido;
         this.id_bus = id_bus;
         this.id_ruta = id_ruta;

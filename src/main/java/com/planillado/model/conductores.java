@@ -1,6 +1,6 @@
 package com.planillado.model;
 
-public class conductores {
+public class Conductores {
     private int id_conductor;
     private String nombre;
     private String licencia;
@@ -8,10 +8,10 @@ public class conductores {
 
 
     // Constructor vacío
-    public conductores() {}
+    public Conductores() {}
 
     // Constructor completo
-    public conductores(int id_conductor, String nombre, String licencia, String telefono) {
+    public Conductores(int id_conductor, String nombre, String licencia, String telefono) {
         this.id_conductor = id_conductor;
         this.nombre = nombre;
         this.licencia = licencia;
