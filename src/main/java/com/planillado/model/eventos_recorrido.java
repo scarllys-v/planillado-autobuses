@@ -3,20 +3,19 @@ package com.planillado.model;
 import java.sql.Timestamp;
 
 public class Eventos_recorrido {
+
     private int id_evento;
     private int id_recorrido;
-    private int id_parada;
+    private Integer id_parada; // ✅ CORREGIDO (permite null)
     private int id_usuario;
     private String tipo_evento;
     private Timestamp hora_registro;
-    private Integer tiempo_estimado_siguiente;  // Integer porque puede ser NULL
+    private Integer tiempo_estimado_siguiente;
     private String observacion;
 
-    // Constructor vacío
     public Eventos_recorrido() {}
 
-    // Constructor completo
-    public Eventos_recorrido(int id_evento, int id_recorrido, int id_parada, int id_usuario,
+    public Eventos_recorrido(int id_evento, int id_recorrido, Integer id_parada, int id_usuario,
                              String tipo_evento, Timestamp hora_registro,
                              Integer tiempo_estimado_siguiente, String observacion) {
         this.id_evento = id_evento;
@@ -29,7 +28,6 @@ public class Eventos_recorrido {
         this.observacion = observacion;
     }
 
-    // Getters y Setters
     public int getId_evento() {
         return id_evento;
     }
@@ -46,11 +44,11 @@ public class Eventos_recorrido {
         this.id_recorrido = id_recorrido;
     }
 
-    public int getId_parada() {
+    public Integer getId_parada() {
         return id_parada;
     }
 
-    public void setId_parada(int id_parada) {
+    public void setId_parada(Integer id_parada) {
         this.id_parada = id_parada;
     }
 
@@ -96,7 +94,7 @@ public class Eventos_recorrido {
 
     @Override
     public String toString() {
-        return "EventoRecorrido{" +
+        return "Eventos_recorrido{" +
                 "id_evento=" + id_evento +
                 ", id_recorrido=" + id_recorrido +
                 ", id_parada=" + id_parada +
